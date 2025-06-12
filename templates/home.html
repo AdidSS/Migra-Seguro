@@ -1,0 +1,22 @@
+{% extends "base.html" %}
+{% block title %}Inicio | Firma Casa Monarca{% endblock %}
+
+{% block content %}
+<div class="hero-container">
+  <div class="hero-left">
+    <h1>Firma <span class="highlight-orange">Digital</span><br>Casa Monarca</h1>
+    <p>
+      Plataforma segura para firmar, verificar y gestionar documentos digitales con respaldo criptográfico.
+    </p>
+    <div class="hero-buttons">
+      <a href="{{ url_for('verify') }}" class="btn-primary">Verificar Documento</a>
+      {% if not session.get('user') %}
+      <a href="{{ url_for('auth.login') }}" class="btn-secondary">Iniciar Sesión</a>
+      {% endif %}
+    </div>
+  </div>
+  <div class="hero-right">
+    <img src="{{ url_for('static', filename='img/logo-casa-monarca2.png') }}" alt="Logo Casa Monarca" class="hero-logo" />
+  </div>
+</div>
+{% endblock %}

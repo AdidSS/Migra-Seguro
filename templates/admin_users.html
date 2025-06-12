@@ -1,0 +1,79 @@
+{% extends "base.html" %}
+{% block title %}Administrar Usuarios{% endblock %}
+{% block content %}
+
+<div class="user-admin-wrapper">
+  <h1>Administrar Niveles de Usuario</h1>
+
+  {% if users %}
+  <div class="signed-table-container">
+    <table class="signed-table">
+      <thead>
+        <tr>
+          <th>Usuario</th>
+          <th>Email</th>
+          <th>Nivel Actual</th>
+          <th>Nuevo Nivel</th>
+          <th>Acción</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for user in users %}
+        <tr>
+          <td>{{ user.username }}</td>
+          <td>{{ user.email }}</td>
+          <td>{{ user.nivel }}</td>
+          <td>
+            <form method="POST" action="{{ url_for('admin_update_user_level') }}">
+              <input type="hidden" name="user_id" value="{{ user.user_id }}">
+              <select name="new_level" required class="select_level">
+                <option value="1" {% if user.nivel == 1 %}selected{% endif %}>Administrador</option>
+                <option value="2" {% if user.nivel == 2 %}selected{% endif %}>Coordinador</option>
+                <option value="3" {% if user.nivel == 3 %}selected{% endif %}>Operativo</option>
+                <option value="4" {% if user.nivel == 4 %}selected{% endif %}>Externo</option>
+              </select>
+          </td>
+          <td class="action-buttons">
+              <button type="submit" class="update-btn">Actualizar</button>
+            </form>
+            <button class="delete-btn" onclick="openDeleteModal('{{ user.user_id }}', '{{ user.username }}')">Eliminar</button>
+          </td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+  {% else %}
+  <p class="empty-message">No hay usuarios registrados.</p>
+  {% endif %}
+</div>
+
+<!-- Modal de confirmación -->
+<div id="deleteModal" class="modal">
+  <div class="modal-content">
+    <p id="modal-message">¿Estás seguro que deseas eliminar esta cuenta?</p>
+    <form method="POST" action="{{ url_for('admin_delete_user') }}">
+      <input type="hidden" id="delete_user_id" name="user_id">
+      <div class="modal-actions">
+        <button type="submit" class="btn-primary">Sí, eliminar</button>
+        <button type="button" onclick="closeDeleteModal()" class="btn-secondary">Cancelar</button>
+      </div>
+    </form>
+  </div>
+</div>
+
+<script>
+  function openDeleteModal(userId, username) {
+    document.getElementById("delete_user_id").value = userId;
+    document.getElementById("modal-message").textContent = `¿Estás seguro que deseas eliminar la cuenta de "${username}"?`;
+    document.getElementById("deleteModal").classList.add("open");
+    document.body.classList.add("modal-open");
+  }
+
+  function closeDeleteModal() {
+    document.getElementById("deleteModal").classList.remove("open");
+    document.body.classList.remove("modal-open");
+  }
+</script>
+
+{% endblock %}

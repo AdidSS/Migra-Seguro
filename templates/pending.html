@@ -1,0 +1,39 @@
+{% extends "base.html" %}
+{% block title %}Firmar Documentos Pendientes{% endblock %}
+{% block content %}
+
+<h1>Documentos Pendientes de Firma</h1>
+
+{% if documents %}
+<div class="signed-table-container">
+  <table class="signed-table">
+    <thead>
+      <tr>
+        <th>Área</th>
+        <th>Nombre del Documento</th>
+        <th>Subido por</th>
+        <th>Acción</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for doc in documents %}
+      <tr>
+        <td>{{ doc.category }}</td>
+        <td>{{ doc.document_name }}</td>
+        <td>{{ doc.uploaded_by }}</td>
+        <td>
+          <form method="POST">
+            <input type="hidden" name="document_id" value="{{ doc.document_id }}">
+            <button type="submit" class="update-btn">Firmar</button>
+          </form>
+        </td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</div>
+{% else %}
+<p class="empty-message">No hay documentos pendientes por firmar.</p>
+{% endif %}
+
+{% endblock %}
