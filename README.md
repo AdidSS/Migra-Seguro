@@ -82,11 +82,11 @@ Daniel Ríos Zúñiga | A01174445
 
 Ricardo Marín Pérez | A01174384
 
-José Antonio Torres Villegas | A00835737
-
 Mario Alberto Landa Flores | A00836172
 
 Victor Adid Salgado Santana | A01710023
+
+José Antonio Torres Villegas | A00835737
 
 ## Licencia
 
