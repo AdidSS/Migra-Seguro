@@ -77,9 +77,10 @@ Como equipo consideramos fundamental implementar soluciones alineadas con los pr
 * **Mejoras de accesibilidad**: Funcionalidades para usuarios con capacidades diferentes.
 
 ## Equipo:
-Ricardo Marín Pérez | A01174384
 
 Daniel Ríos Zúñiga | A01174445
+
+Ricardo Marín Pérez | A01174384
 
 José Antonio Torres Villegas | A00835737
 
