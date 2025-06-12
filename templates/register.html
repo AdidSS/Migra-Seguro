@@ -1,0 +1,53 @@
+{% extends 'base.html' %} {% block title %}Registro{% endblock %} {% block
+content %}
+<link
+  rel="stylesheet"
+  href="{{ url_for('static', filename='css/auth.css') }}"
+/>
+<div class="auth-container">
+  <div class="auth-card">
+    <div class="logo-container">
+      <img
+        src="{{ url_for('static', filename='img/logo-casa-monarca2.png') }}"
+        alt="Logo Casa Monarca"
+        class="login-logo"
+      />
+    </div>
+    <div class="auth-toggle">
+      <a href="{{ url_for('auth.login') }}">Iniciar sesión</a>
+      <a href="{{ url_for('auth.register') }}" class="active">Crear cuenta</a>
+    </div>
+    <form method="POST" action="{{ url_for('auth.register') }}">
+      <input
+        type="text"
+        name="username"
+        placeholder="Nombre de usuario"
+        required
+      />
+      <input
+        type="email"
+        name="email"
+        placeholder="Correo electrónico"
+        required
+      />
+      <input
+        type="password"
+        name="password"
+        placeholder="Contraseña"
+        required
+      />
+      <input
+        type="password"
+        name="confirm_password"
+        placeholder="Confirmar contraseña"
+        required
+      />
+      <button type="submit">Registrarse</button>
+    </form>
+    <p class="switch-msg">
+      ¿Ya tienes una cuenta?
+      <a href="{{ url_for('auth.login') }}">Inicia sesión aquí</a>
+    </p>
+  </div>
+</div>
+{% endblock %}

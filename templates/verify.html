@@ -1,0 +1,39 @@
+{% extends "base.html" %}
+{% block title %}Verificar Firma Digital{% endblock %}
+{% block content %}
+
+<h1>Verificar Firma Digital</h1>
+
+<div class="verify-container">
+  <form class="verify-form" method="POST" enctype="multipart/form-data">
+    <label for="document"><strong>Selecciona el documento</strong></label>
+    <div class="upload-dropzone" onclick="document.getElementById('document').click()">
+      <p id="doc-label">Haz clic para seleccionar un archivo</p>
+    </div>
+    <input type="file" name="document" id="document" required style="display:none" onchange="updateDocName(this)" />
+
+    <label for="signature"><strong>Pega la firma (Base64)</strong></label>
+    <textarea name="signature" id="signature" rows="6" required placeholder="Pega aquí la cadena Base64..."></textarea>
+
+    <button type="submit">Verificar</button>
+  </form>
+
+  {% if result is not none %}
+  <div class="verify-result {{ 'success' if result else 'error' }}">
+    {% if result %}
+      ✔ La firma es válida.
+    {% else %}
+      ✖ La firma no es válida.
+    {% endif %}
+  </div>
+  {% endif %}
+</div>
+
+<script>
+  function updateDocName(input) {
+    const label = document.getElementById("doc-label");
+    label.textContent = input.files.length > 0 ? input.files[0].name : "Haz clic para seleccionar un archivo";
+  }
+</script>
+
+{% endblock %}

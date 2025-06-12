@@ -1,0 +1,69 @@
+{% extends "base.html" %}
+{% block title %}Subir Documento{% endblock %}
+{% block content %}
+
+<h1>Subir Documento</h1>
+
+<div class="upload-wrapper">
+  <form class="upload-card" method="POST" enctype="multipart/form-data" action="{{ url_for('upload') }}">
+    
+    <!-- Etiqueta visible personalizada -->
+    <label class="SelectArchivo">Selecciona un archivo</label>
+    <div class="upload-dropzone" onclick="document.getElementById('document').click()">
+      <p>Haz clic o arrastra el archivo aquí</p>
+    </div>
+    <p class="filename-preview" id="filename">Ningún archivo seleccionado</p>
+    <input type="file" name="document" id="document" required onchange="updateFilename(this)" />
+
+    <!-- Fila de categoría y visibilidad en columnas -->
+    <div class="upload-columns">
+      <div class="upload-field">
+        <label for="category">Categoría del documento</label>
+        <select name="category" id="category" required>
+          <option disabled selected value="">Selecciona una categoría</option>
+          <option value="Legal">Legal</option>
+          <option value="Humanitaria">Humanitaria</option>
+          <option value="Psicosocial">Psicosocial</option>
+          <option value="Compras">Compras</option>
+        </select>
+      </div>
+
+      <div class="upload-field">
+        <label for="visibility">Visibilidad del documento</label>
+        <select name="visibility" id="visibility" required>
+          <option disabled selected value="">Selecciona visibilidad</option>
+          <option value="public">Público</option>
+          <option value="private">Privado</option>
+        </select>
+      </div>
+    </div>
+
+    <!-- Acciones -->
+    <div class="options">
+      <label><input type="radio" name="action" value="sign" checked /> Firmar ahora</label>
+      <label><input type="radio" name="action" value="save" /> Guardar para firmar luego</label>
+    </div>
+
+    <button type="submit">Enviar</button>
+
+    <!-- Mensajes Flash -->
+    <div class="upload-flash-container">
+      {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+          {% for category, msg in messages %}
+            <div class="flash-message {{ category }}">{{ msg }}</div>
+          {% endfor %}
+        {% endif %}
+      {% endwith %}
+    </div>
+  </form>
+
+  <script>
+    function updateFilename(input) {
+      const label = document.getElementById("filename");
+      label.textContent = input.files.length > 0 ? input.files[0].name : "Ningún archivo seleccionado";
+    }
+  </script>
+</div>
+
+{% endblock %}

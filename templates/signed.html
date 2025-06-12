@@ -1,0 +1,112 @@
+{% extends "base.html" %}
+{% block title %}Documentos Firmados{% endblock %}
+{% block content %}
+
+<div class="header-with-search">
+  <h1>Documentos Firmados</h1>
+  <div class="search-controls">
+    <input
+      type="text"
+      id="searchInput"
+      placeholder="Buscar por nombre de documento..."
+    />
+    <select id="areaFilter">
+      <option value="">Área</option>
+      <option value="Legal">Legal</option>
+      <option value="Humanitaria">Humanitaria</option>
+      <option value="Psicosocial">Psicosocial</option>
+      <option value="Compras">Compras</option>
+    </select>
+    <button id="sortToggleBtn" class="sort-btn inactive">Fecha</button>
+  </div>
+</div>
+
+{% if documents %}
+<div class="signed-table-container">
+  <table class="signed-table" id="docTable">
+    <thead>
+      <tr>
+        <th>Área</th>
+        <th>Nombre del Documento</th>
+        <th>Subido por</th>
+        <th>Firma (Base64)</th>
+        <th>Fecha de Firma</th>
+        <th>Acciones</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for doc in documents %}
+      <tr>
+        <td>{{ doc.category }}</td>
+        <td>{{ doc.document_name }}</td>
+        <td>{{ doc.uploaded_by }}</td>
+        <td class="signature-cell">{{ doc.signature_base64 }}</td>
+        <td>{{ doc.timestamp }}</td>
+        <td>
+          <a href="{{ url_for('download_file', blob_name=doc.blob_name) }}" 
+            class="download-btn" 
+            title="Descargar archivo">
+            Descargar
+          </a>
+        </td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</div>
+{% else %}
+<p class="empty-message">No hay documentos firmados.</p>
+{% endif %}
+
+<!-- Scripts -->
+<script>
+  document.getElementById("searchInput").addEventListener("input", function () {
+    const filter = this.value.toLowerCase();
+    const rows = document.querySelectorAll(".signed-table tbody tr");
+    rows.forEach((row) => {
+      const docName = row.cells[1].textContent.toLowerCase();
+      row.style.display = docName.includes(filter) ? "" : "none";
+    });
+  });
+
+  let sortState = 0;
+
+  function sortTableByDate(ascending) {
+    const tbody = document.querySelector("#docTable tbody");
+    const rows = Array.from(tbody.querySelectorAll("tr"));
+    rows.sort((a, b) => {
+      const dateA = new Date(a.cells[4].textContent);
+      const dateB = new Date(b.cells[4].textContent);
+      return ascending ? dateA - dateB : dateB - dateA;
+    });
+    rows.forEach((row) => tbody.appendChild(row));
+  }
+
+  document.getElementById("sortToggleBtn").addEventListener("click", function () {
+    const btn = this;
+    sortState = (sortState + 1) % 3;
+    if (sortState === 0) {
+      btn.textContent = "Fecha";
+      btn.classList.add("inactive");
+    } else if (sortState === 1) {
+      btn.textContent = "Fecha ⭣";
+      btn.classList.remove("inactive");
+      sortTableByDate(false);
+    } else {
+      btn.textContent = "Fecha ⭡";
+      btn.classList.remove("inactive");
+      sortTableByDate(true);
+    }
+  });
+
+  document.getElementById("areaFilter").addEventListener("change", function () {
+    const selectedArea = this.value.toLowerCase();
+    const rows = document.querySelectorAll(".signed-table tbody tr");
+    rows.forEach((row) => {
+      const areaText = row.cells[0].textContent.toLowerCase();
+      row.style.display = !selectedArea || areaText === selectedArea ? "" : "none";
+    });
+  });
+</script>
+
+{% endblock %}
